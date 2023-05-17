@@ -13,3 +13,14 @@ type I_userMongo struct {
 	Password string `binding:"required"`
 	Birthday int    `binding:"required,number"`
 }
+
+type I_Login struct {
+	Email    string `binding:"required"`
+	Password string `binding:"required"`
+}
+
+type I_LoginResult struct {
+	Email    string
+	Password string
+	Id       string
+}

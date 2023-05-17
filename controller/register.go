@@ -3,10 +3,9 @@ package controller
 import (
 	"context"
 	"go-api/config"
+	"go-api/helper"
 	"go-api/intface"
 	"go-api/responses"
-	"go-api/helper"
-
 
 	"net/http"
 	"time"
@@ -16,10 +15,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var userCollection *mongo.Collection = config.GetCollection(config.DB, "user_golang")
-var validate = validator.New()
 
 func CreateUser(c *gin.Context) {
+	var userCollection *mongo.Collection = config.GetCollection(config.DB, "user")
+	var validate = validator.New()
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	var user intface.I_user
 	defer cancel()
@@ -40,7 +39,6 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-
 	epoch, err := helper.ConvertToEpoch(user.Birthday, "2006-01-02")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
@@ -60,6 +58,6 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, responses.UserResponse{Status: http.StatusCreated, Message: "success", Data: map[string]interface{}{"data": result}})
+	c.JSON(http.StatusCreated, responses.UserResponse{Status: http.StatusCreated, Message: "success", Data: map[string]interface{}{"result": result}})
 
 }
