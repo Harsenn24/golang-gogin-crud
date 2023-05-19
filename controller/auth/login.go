@@ -1,8 +1,7 @@
-package controller
+package auth
 
 import (
 	"context"
-	"go-api/config"
 	"go-api/helper"
 	"go-api/intface"
 	"go-api/responses"
@@ -11,11 +10,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func LoginUser(c *gin.Context) {
-	var userCollection *mongo.Collection = config.GetCollection(config.DB, "user")
 
 	var validate = validator.New()
 

@@ -1,4 +1,4 @@
-package controller
+package testing
 
 import (
 	"net/http"
@@ -6,13 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
-
-func HelloParam(c *gin.Context) {
-	id := c.Param("id")
+func HelloHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"name":   "harsenn",
 		"status": "single",
-		"id":     id,
 	})
 }

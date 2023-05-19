@@ -1,4 +1,4 @@
-package controller
+package testing
 
 import (
 	"fmt"

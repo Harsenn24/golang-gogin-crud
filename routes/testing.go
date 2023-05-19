@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"go-api/controller"
+	"go-api/controller/testing"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,9 +9,9 @@ import (
 func TestingRoute(router *gin.Engine) {
 	v1 := router.Group("/v1")
 
-	v1.GET("/hello", controller.HelloHandler)
-	v1.GET("/hello/:id", controller.HelloParam)
-	v1.POST("/hello/data", controller.NewData)
-	v1.GET("/hello/query/:id", controller.HelloQuery)
+	v1.GET("/hello", testing.HelloHandler)
+	v1.GET("/hello/:id", testing.HelloParam)
+	v1.POST("/hello/data", testing.NewData)
+	v1.GET("/hello/query/:id", testing.HelloQuery)
 	
 }

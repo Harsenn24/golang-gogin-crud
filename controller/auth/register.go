@@ -1,8 +1,7 @@
-package controller
+package auth
 
 import (
 	"context"
-	"go-api/config"
 	"go-api/helper"
 	"go-api/intface"
 	"go-api/responses"
@@ -12,12 +11,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 
 func CreateUser(c *gin.Context) {
-	var userCollection *mongo.Collection = config.GetCollection(config.DB, "user")
 	var validate = validator.New()
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	var user intface.I_user

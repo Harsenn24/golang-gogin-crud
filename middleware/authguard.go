@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"go-api/controller"
+	"go-api/controller/auth"
 	"go-api/helper"
 	"go-api/responses"
 	"net/http"
@@ -24,7 +24,7 @@ func Authguard(c *gin.Context) {
 
 	email := data.Email
 
-	find_account, err := controller.CheckAccount(c, email)
+	find_account, err := auth.CheckAccount(c, email)
 
 	if err != nil {
 		c.AbortWithStatusJSON(500, responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"data": err.Error()}})

@@ -1,18 +1,15 @@
-package controller
+package auth
 
 import (
 	"context"
-	"go-api/config"
 	"go-api/intface"
 	"time"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 
 func CheckAccount(c *gin.Context, email string) ([]intface.I_user, error) {
-	var user_collection *mongo.Collection = config.GetCollection(config.DB, "user")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 
@@ -31,7 +28,7 @@ func CheckAccount(c *gin.Context, email string) ([]intface.I_user, error) {
 		},
 	}
 
-	result, err := user_collection.Aggregate(ctx, pipeline)
+	result, err := userCollection.Aggregate(ctx, pipeline)
 
 	if err != nil {
 		return nil, err
