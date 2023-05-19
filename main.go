@@ -4,7 +4,6 @@ import (
 	"go-api/config"
 	"go-api/routes"
 
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,8 +13,8 @@ func main() {
 
 	config.ConnectDB()
 
-	routes.UserRoute(router)
 	routes.TestingRoute(router)
+	routes.UserRoute(router)
 
 	router.Run(":5000")
 }

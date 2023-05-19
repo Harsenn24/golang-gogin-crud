@@ -1,9 +1,11 @@
 package helper
 
 import (
+	"errors"
 	"go-api/environment"
 	"go-api/intface"
 	"os"
+
 	"github.com/dgrijalva/jwt-go"
 )
 
@@ -27,4 +29,34 @@ func JwtSign(p *intface.I_LoginResult) (string, error) {
 
 	return signedToken, nil
 
+}
+
+type Claims struct {
+	Username string `json:"username"`
+	jwt.StandardClaims
+}
+
+
+func DecryptJWT(tokenString string, secretKey []byte) (*intface.JwtClaim, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &intface.JwtClaim{}, func(token *jwt.Token) (interface{}, error) {
+		// Validate the signing method
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, errors.New("invalid token")
+		}
+
+		// Return the secret key for validation
+		return secretKey, nil
+	})
+
+	// Check for errors during parsing
+	if err != nil {
+		return nil, err
+	}
+
+	// Check if the token is valid
+	if claims, ok := token.Claims.(*intface.JwtClaim); ok && token.Valid {
+		return claims, nil
+	}
+
+	return nil, errors.New("invalid token")
 }
