@@ -2,9 +2,11 @@ package middleware
 
 import (
 	"go-api/controller/auth"
+	"go-api/environment"
 	"go-api/helper"
 	"go-api/responses"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,7 +15,10 @@ func Authguard(c *gin.Context) {
 
 	author := c.GetHeader("authorization")
 
-	secretKey := []byte("123456789")
+	environment.ExportEnv()
+	keyJwt := os.Getenv("KEYJWT")
+
+	secretKey := []byte(keyJwt)
 
 	data, err := helper.DecryptJWT(author, secretKey)
 

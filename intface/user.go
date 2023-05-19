@@ -14,6 +14,7 @@ type I_userMongo struct {
 	Email    string `binding:"required"`
 	Password string `binding:"required"`
 	Birthday int    `binding:"required,number"`
+	Active   bool
 }
 
 type I_Login struct {
@@ -25,6 +26,7 @@ type I_LoginResult struct {
 	Email    string
 	Password string
 	Id       string
+	Active   bool
 }
 
 type JwtClaim struct {
@@ -35,6 +37,6 @@ type JwtClaim struct {
 }
 
 type CheckAccount struct {
-	Email    string
-	Id       string
+	Email string
+	Id    string
 }

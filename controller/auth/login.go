@@ -42,6 +42,7 @@ func LoginUser(c *gin.Context) {
 			{Key: "$project", Value: bson.D{
 				{Key: "email", Value: "$email"},
 				{Key: "password", Value: "$password"},
+				{Key: "active", Value: "$active"},
 				{Key: "id", Value: bson.D{
 					{Key: "$toString", Value: "$_id"},
 				}},
@@ -61,14 +62,17 @@ func LoginUser(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
 		return
 	}
+	if !results[0].Active {
+		c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": "This account is not already active"}})
+		return
+	}
 
 	matchPassword := helper.DecryptPassword(results[0].Password, userlogin.Password)
 
 	if matchPassword == "password match" {
 
-		payload := intface.I_LoginResult{
+		payload := intface.CheckAccount{
 			Email:    results[0].Email,
-			Password: results[0].Password,
 			Id:       results[0].Id,
 		}
 		token_data, err := helper.JwtSign(&payload)

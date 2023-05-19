@@ -9,7 +9,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func JwtSign(p *intface.I_LoginResult) (string, error) {
+func JwtSign(p *intface.CheckAccount) (string, error) {
 	payload := jwt.MapClaims{
 		"email": p.Email,
 		"id":    p.Id,
@@ -29,11 +29,6 @@ func JwtSign(p *intface.I_LoginResult) (string, error) {
 
 	return signedToken, nil
 
-}
-
-type Claims struct {
-	Username string `json:"username"`
-	jwt.StandardClaims
 }
 
 

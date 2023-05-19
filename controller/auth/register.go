@@ -13,7 +13,6 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-
 func CreateUser(c *gin.Context) {
 	var validate = validator.New()
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -59,6 +58,7 @@ func CreateUser(c *gin.Context) {
 		Email:    user.Email,
 		Password: hashedPassword,
 		Birthday: int(epoch),
+		Active:   false,
 	}
 
 	result, err := userCollection.InsertOne(ctx, newUser)
