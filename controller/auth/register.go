@@ -36,6 +36,18 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
+	find_account, err := CheckAccount(c, user.Email)
+
+	if err != nil {
+		c.AbortWithStatusJSON(500, responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
+		return
+	}
+
+	if len(find_account) > 0 {
+		c.AbortWithStatusJSON(500, responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"data": "Email already in used"}})
+		return
+	}
+
 	epoch, err := helper.ConvertToEpoch(user.Birthday, "2006-01-02")
 	if err != nil {
 		c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
