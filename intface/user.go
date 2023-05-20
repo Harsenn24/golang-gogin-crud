@@ -40,3 +40,7 @@ type CheckAccount struct {
 	Email string
 	Id    string
 }
+
+type BodyUserUpdate struct {
+	Id string `binding:"required"`
+}

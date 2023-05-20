@@ -12,6 +12,8 @@ import (
 func UserRoute(router *gin.Engine) {
 	router.POST("/register", auth.CreateUser) 
 	router.POST("/login", auth.LoginUser) 
+	router.PUT("/active-user", auth.ActiveUser) 
+
 	
 	router.Use(middleware.Authguard)
 	
