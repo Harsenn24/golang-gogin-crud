@@ -11,6 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func CreateUser(c *gin.Context) {
@@ -61,12 +62,26 @@ func CreateUser(c *gin.Context) {
 		Active:   false,
 	}
 
-	result, err := userCollection.InsertOne(ctx, newUser)
+	result_insert, err := userCollection.InsertOne(ctx, newUser)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
 		return
 	}
 
-	c.JSON(http.StatusCreated, responses.UserResponse{Status: http.StatusCreated, Message: "success", Data: map[string]interface{}{"result": result}})
+	
+	object_id := result_insert.InsertedID.(primitive.ObjectID).Hex()
+
+	message_email := "Thank you for registering your account!\n\nYour user ID: " + object_id
+
+	result_send, err := helper.SendEmail(newUser.Email, "REGISTRATION SUCCESS", message_email)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
+		return
+	}
+
+	c.JSON(http.StatusCreated, responses.UserResponse{Status: http.StatusCreated, Message: "sucess", Data: map[string]interface{}{"result": result_send}})
+
+
+
 
 }
