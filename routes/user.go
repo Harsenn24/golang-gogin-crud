@@ -1,9 +1,8 @@
 package routes
 
 import (
-	"go-api/controller/testing"
 	"go-api/controller/auth"
-
+	"go-api/controller/product"
 	"go-api/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -17,7 +16,7 @@ func UserRoute(router *gin.Engine) {
 	
 	router.Use(middleware.Authguard)
 	
-	router.GET("/user", testing.AggragateExample) 
+	router.POST("/product", product.Createproduct) 
 
 
 

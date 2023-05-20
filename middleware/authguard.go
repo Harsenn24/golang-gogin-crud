@@ -41,6 +41,8 @@ func Authguard(c *gin.Context) {
 		return
 	}
 
+	c.Set("user", data)
+
 	c.Next()
 
 }

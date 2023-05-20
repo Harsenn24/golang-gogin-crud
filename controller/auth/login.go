@@ -7,6 +7,7 @@ import (
 	"go-api/responses"
 	"net/http"
 	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"go.mongodb.org/mongo-driver/bson"
@@ -35,7 +36,12 @@ func LoginUser(c *gin.Context) {
 	pipeline := bson.A{
 		bson.D{
 			{Key: "$match", Value: bson.D{
-				{Key: "email", Value: userlogin.Email},
+				{Key: "$and", Value: bson.A{
+					bson.D{
+						{Key: "email", Value: userlogin.Email},
+						{Key: "active", Value: true},
+					},
+				}},
 			}},
 		},
 		bson.D{
@@ -53,17 +59,24 @@ func LoginUser(c *gin.Context) {
 	result, err := userCollection.Aggregate(ctx, pipeline)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
+		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
 
 	var results []intface.I_LoginResult
+	
 	if err := result.All(ctx, &results); err != nil {
-		c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
+		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
+
+	if len(results) == 0 {
+		c.JSON(400, responses.UserResponse{Status: 400, Message: "error", Data: map[string]interface{}{"error": "user not found"}})
+		return
+	}
+
 	if !results[0].Active {
-		c.JSON(http.StatusInternalServerError, responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": "This account is not already active"}})
+		c.JSON(400, responses.UserResponse{Status: 400, Message: "error", Data: map[string]interface{}{"error": "This account is not already active"}})
 		return
 	}
 
@@ -72,19 +85,19 @@ func LoginUser(c *gin.Context) {
 	if matchPassword == "password match" {
 
 		payload := intface.CheckAccount{
-			Email:    results[0].Email,
-			Id:       results[0].Id,
+			Email: results[0].Email,
+			Id:    results[0].Id,
 		}
 		token_data, err := helper.JwtSign(&payload)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
 			return
 		}
-	
+
 		c.JSON(http.StatusCreated, responses.UserResponse{Status: http.StatusCreated, Message: "success", Data: map[string]interface{}{"token": token_data}})
 		return
 	}
 
 	c.JSON(http.StatusCreated, responses.UserResponse{Status: http.StatusCreated, Message: "success", Data: map[string]interface{}{"result": matchPassword}})
-	
+
 }
