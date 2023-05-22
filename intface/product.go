@@ -20,6 +20,12 @@ type CreateProductDocument struct {
 type ListProduct struct {
 	Product_Name        string `json:"product_name"`
 	Product_price       int    `json:"product_price"`
+	Id                  string `json:"id"`
+}
+
+type DetailProduct struct {
+	Product_Name        string `json:"product_name"`
+	Product_price       int    `json:"product_price"`
 	Product_description string `json:"product_description"`
 	Product_quantity    int    `json:"product_quantity"`
 	User                string `json:"user"`

@@ -17,6 +17,8 @@ func UserRoute(router *gin.Engine) {
 
 	router.GET("/product-list", product.ListProduct)
 
+	router.GET("/product-list/:id", product.DetailProduct)
+
 	router.Use(middleware.Authguard)
 	
 	router.POST("/product", product.CreateProduct) 
