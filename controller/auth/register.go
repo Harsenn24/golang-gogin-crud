@@ -48,7 +48,7 @@ func CreateUser(c *gin.Context) {
 		return
 	}
 
-	epoch, err := helper.ConvertToEpoch(user.Birthday, "2006-01-02")
+	epoch, err := helper.ConvertToEpoch(user.Birthday)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
 		return

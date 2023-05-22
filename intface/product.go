@@ -16,3 +16,12 @@ type CreateProductDocument struct {
 	Quantity    int    `binding:"required,number"`
 	User_id     primitive.ObjectID
 }
+
+type ListProduct struct {
+	Product_Name        string `json:"product_name"`
+	Product_price       int    `json:"product_price"`
+	Product_description string `json:"product_description"`
+	Product_quantity    int    `json:"product_quantity"`
+	User                string `json:"user"`
+	Id                  string `json:"id"`
+}
