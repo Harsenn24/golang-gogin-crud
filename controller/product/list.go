@@ -16,7 +16,9 @@ func ListProduct(c *gin.Context) {
 
 	defer cancel()
 
-	pipeLine := product.QueryProductList()
+	query_search := c.Query("filter")
+
+	pipeLine := product.QueryProductList(query_search)
 
 	result, err := product_collection.Aggregate(ctx, pipeLine)
 	if err != nil {
@@ -30,6 +32,6 @@ func ListProduct(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, responses.UserResponse{Status: 200, Message: "success", Data: map[string]interface{}{"data": results}})
+	c.JSON(200, responses.UserResponse{Status: 200, Message: "success", Data: map[string]interface{}{"result": results}})
 
 }
