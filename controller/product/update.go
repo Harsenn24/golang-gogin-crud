@@ -31,7 +31,6 @@ func UpdatePRoduct(c *gin.Context) {
 
 	id_product := c.Param("id")
 
-	//change id_product to object id
 	id, err := primitive.ObjectIDFromHex(id_product)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"data": err.Error()}})

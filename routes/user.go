@@ -18,10 +18,7 @@ func UserRoute(router *gin.Engine) {
 	
 	router.POST("/product", product.CreateProduct) 
 	router.PUT("/product/:id", product.UpdatePRoduct) 
-	router.PUT("/product-image/:id", product.UpdateImageProduct) 
-
-
-
-
+	router.PUT("/product-image/:id", product.UpdateImageProduct)
+	router.DELETE("/product/:id", product.DeleteProduct) 
 
 }

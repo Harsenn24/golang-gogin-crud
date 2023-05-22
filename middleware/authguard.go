@@ -23,7 +23,7 @@ func Authguard(c *gin.Context) {
 	data, err := helper.DecryptJWT(author, secretKey)
 
 	if err != nil {
-		c.AbortWithStatusJSON(500, responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
+		c.AbortWithStatusJSON(500, responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"error": "you dont have authorization"}})
 		return
 	}
 
@@ -32,7 +32,7 @@ func Authguard(c *gin.Context) {
 	find_account, err := auth.CheckAccount(c, email)
 
 	if err != nil {
-		c.AbortWithStatusJSON(500, responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
+		c.AbortWithStatusJSON(500, responses.UserResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"error": "This JWT does not match the account"}})
 		return
 	}
 
